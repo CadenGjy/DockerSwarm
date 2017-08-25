@@ -10,7 +10,7 @@
     },
     "scriptUrl":{
       "type": "string",
-      "defaultValue": "https://raw.githubusercontent.com/ups216/DockerSwarm/master/InstallDockerAndPrivateRegistry.sh",
+      "defaultValue": "https://raw.githubusercontent.com/ups216/DockerSwarm/master/EmptyScript.sh",
       "metadata": {
         "description": "The url of the script that install docker and swarm."
       } 
@@ -38,14 +38,14 @@
     "masterFirstAddr": "4",
     "baseSubnet": "10.0.0.",
     "vmNameNode": "swarm-node-",
-    "vmSizeMaster": "Standard_A1",
-    "vmSizeNode": "Standard_A1",
+    "vmSizeMaster": "Standard_D1",
+    "vmSizeNode": "Standard_D1",
     "apiVersion": "2015-06-15",
     "availabilitySetMasters": "swarm-masters-set",
     "availabilitySetNodes": "swarm-nodes-set",
     "osImagePublisher": "Canonical",
     "osImageOffer": "UbuntuServer",
-    "osImageSKU": "14.04.3-LTS",
+    "osImageSKU": "16.04-LTS",
     "managementPublicIPAddrName": "swarm-lb-masters-ip",
     "nodesPublicIPAddrName": "swarm-lb-nodes-ip",
     "virtualNetworkName": "swarm-vnet",
@@ -476,7 +476,7 @@
     },
     {
       "type": "Microsoft.Compute/virtualMachines/extensions",
-      "name": "[concat(variables('vmNameMaster'), copyIndex(), '/InstallDockerAndPrivateRegistry')]",
+      "name": "[concat(variables('vmNameMaster'), copyIndex(), '/EmptyScript')]",
       "apiVersion": "[variables('apiVersion')]",
       "location": "[resourceGroup().location]",
        "copy": {
@@ -494,13 +494,13 @@
                     "fileUris": [
                         "[parameters('scriptUrl')]"
                     ],
-                    "commandToExecute": "[concat('/bin/bash -c \"/bin/bash InstallDockerAndPrivateRegistry.sh ', variables('clusterInstallParameters'), ' >> /var/log/azure/cluster-bootstrap.log 2>&1\"')]"
+                    "commandToExecute": "[concat('/bin/bash -c \"/bin/bash EmptyScript.sh ', variables('clusterInstallParameters'), ' >> /var/log/azure/cluster-bootstrap.log 2>&1\"')]"
                 }
             }
     },
    {
       "type": "Microsoft.Compute/virtualMachines/extensions",
-      "name": "[concat(variables('vmNameNode'), copyIndex(), '/InstallDockerAndPrivateRegistry')]",
+      "name": "[concat(variables('vmNameNode'), copyIndex(), '/EmptyScript')]",
       "apiVersion": "[variables('apiVersion')]",
       "location": "[resourceGroup().location]",
       "copy": {
@@ -518,7 +518,7 @@
                     "fileUris": [
                         "[parameters('scriptUrl')]"
                     ],
-                    "commandToExecute": "[concat('/usr/bin/nohup /bin/bash -c \"/bin/bash InstallDockerAndPrivateRegistry.sh ', variables('clusterInstallParameters'), ' >> /var/log/azure/cluster-bootstrap.log 2>&1 &\" &')]"
+                    "commandToExecute": "[concat('/usr/bin/nohup /bin/bash -c \"/bin/bash EmptyScript.sh ', variables('clusterInstallParameters'), ' >> /var/log/azure/cluster-bootstrap.log 2>&1 &\" &')]"
                 }
             }
     }
