@@ -125,8 +125,3 @@ isagent()
 if isagent ; then
   echo "this node is an agent"
 fi
-
-# Setup Private Registry
-echo "{ \"insecure-registries\":[\"operation:82\"] }" | sudo tee /etc/docker/daemon.json
-
-# Install Java
