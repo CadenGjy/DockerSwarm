@@ -128,21 +128,27 @@ fi
 ################
 # Install Docker
 ################
-
 echo "Installing and configuring docker"
-wget https://downloadfile.blob.core.chinacloudapi.cn/docker-install/docker-installer.tar.gz
-tar xzf docker-installer.tar.gz
-cd ~/docker-installer/Debian-based/docker
-sudo sh install.sh
-sudo usermod -aG docker azureuser
-sudo service docker restart
-if isagent ; then
-  # Start Docker and listen on :2375 (no auth, but in vnet)
-  echo 'DOCKER_OPTS="-H unix:///var/run/docker.sock -H 0.0.0.0:2375"' | sudo tee -a /etc/default/docker
-fi
+installDocker()
+{
+  for i in {1..10}; do
+    wget https://downloadfile.blob.core.chinacloudapi.cn/docker-install/docker-installer.tar.gz
+    tar xzf docker-installer.tar.gz
+    cd ~/docker-installer/Debian-based/docker
+    sudo sh install.sh
+    cd ~/docker-installer/docker-compose
+    sudo sh install.sh
+    if [ $? -eq 0 ]
+    then
+      # hostname has been found continue
+      echo "Docker installed successfully"
+      break
+    fi
+    sleep 10
+  done
+}
+time installDocker
+sudo usermod -aG docker $AZUREUSER
 
-echo "Installing docker compose"
-cd ~/docker-installer/docker-compose
-sudo sh install.sh
-chmod +x /usr/local/bin/docker-compose
-sudo service docker restart
+
+
