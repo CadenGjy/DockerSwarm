@@ -125,3 +125,18 @@ isagent()
 if isagent ; then
   echo "this node is an agent"
 fi
+################
+# Install Docker
+################
+
+echo "Installing and configuring docker"
+wget https://downloadfile.blob.core.chinacloudapi.cn/docker-install/docker-installer.tar.gz
+tar xzf docker-installer.tar.gz
+cd ~/docker-installer/Debian-based/docker
+sudo sh install.sh
+sudo usermod -aG docker azureuser
+
+echo "Installing docker compose"
+cd ~/docker-installer/docker-compose
+sudo sh install.sh
+sudo service docker restart
