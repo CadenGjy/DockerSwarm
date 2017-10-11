@@ -135,8 +135,14 @@ tar xzf docker-installer.tar.gz
 cd ~/docker-installer/Debian-based/docker
 sudo sh install.sh
 sudo usermod -aG docker azureuser
+sudo service docker restart
+if isagent ; then
+  # Start Docker and listen on :2375 (no auth, but in vnet)
+  echo 'DOCKER_OPTS="-H unix:///var/run/docker.sock -H 0.0.0.0:2375"' | sudo tee -a /etc/default/docker
+fi
 
 echo "Installing docker compose"
 cd ~/docker-installer/docker-compose
 sudo sh install.sh
+chmod +x /usr/local/bin/docker-compose
 sudo service docker restart
